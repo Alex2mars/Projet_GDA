@@ -10,9 +10,9 @@ Dossier **docker_postgres** du Git :
 
 - deployment : Dossier contenant le nécessaire pour déployer le docker
 --> Lancer ./run.sh **la première fois**, ce qui va :
--- 1) Charger l'image dans docker
--- 2) Lancer *docker-compose -d up*, pour lancer le service et le passer en arrière plan
+1) Charger l'image dans docker
+2) Lancer *docker-compose -d up*, pour lancer le service et le passer en arrière plan
 --> Par la suite, gérer le service avec *docker-compose*:
--- *docker-compose -d up* pour lancer le service s'il est éteint
--- *docker-compose down* pour arrêter le service s'il est lancé
+*docker-compose -d up* pour lancer le service s'il est éteint
+*docker-compose down* pour arrêter le service s'il est lancé
 
