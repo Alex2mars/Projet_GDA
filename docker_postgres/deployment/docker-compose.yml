@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  pg_gda:
+    image: pg_gda:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER_FILE=/run/secrets/pg_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/pg_password
+    volumes:
+      - /var/lib/postgresql/pg_gda/data:/var/lib/postgresql/data
