@@ -1,0 +1,7 @@
+{
+	"action": "create",
+	"db_name": "truc",
+	"type":["annonClasses","pseudonymization.colSuppression", "annonClasses.k_annon.k_annon2"],
+	"datasource":"banking",
+}
+

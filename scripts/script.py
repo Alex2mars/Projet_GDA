@@ -8,7 +8,7 @@ import subprocess
 def read_file(file_to_open):
 	input_from_file = {}
 	file = open(file_to_open, 'r')
-	input_from_file = json.load(file)
+	input_from_file = json.loads(file)
 	file.close()
 	return input_from_file
 
