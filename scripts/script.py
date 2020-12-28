@@ -39,6 +39,10 @@ def connect(host, database, user, password, port):
 
         return conn
 
+def create_database(conn, dbname)
+    cur = conn.cursor()
+    cur.execute('CREATE DATABASE ' + dbname)
+    cur.close()
 
 if __name__ == '__main__':
     if len(sys.argv) >= 3:
