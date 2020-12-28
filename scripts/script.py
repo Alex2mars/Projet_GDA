@@ -32,19 +32,28 @@ def connect(host, database, user, password, port):
         conn = psy.connect(**params)
         conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
+
     except (Exception, psy.DatabaseError) as error:
         print(error)
         print("Erreur")
         sys.exit()
 
-        return conn
+    return conn
 
-def create_database(conn, dbname)
+def create_database(conn, dbname):
     cur = conn.cursor()
     cur.execute('CREATE DATABASE ' + dbname)
     cur.close()
 
+def create_tables(conn, dbname, tables):
+    print("Create tables")
+    cur = conn.cursor()
+    sql_file = open(tables,'r')
+    cur.execute(sql_file.read())
+    cur.close()
+
 if __name__ == '__main__':
+    db_exist = True
     if len(sys.argv) >= 3:
         connection = sys.argv[1]
         gestion = sys.argv[2]
@@ -55,11 +64,23 @@ if __name__ == '__main__':
         sys.exit()
 
     bdd = read_file(connection)
+    handler = read_file(gestion)
     #print("BDD : ", bdd)
 
     if "db_name" not in bdd:
         bdd['db_name'] = 'postgres'
+        db_exist = False
     
     connection = connect(bdd['host'], bdd['db_name'], bdd['username'], bdd['password'], bdd['server_port'])
-    print(connection)
+    #print(connection)
+
+    #Create db
+    if handler['action'] == 'create' and not db_exist:
+        print("Create db")
+        create_database(connection, handler['db_name'])
+
+    #Create tables
+    if handler['action'] == 'create' and "tables_to_create" in handler:
+        create_tables(connection, handler['db_name'], handler['tables_to_create'])
+
     print("Everything should be ok !")
