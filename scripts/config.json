@@ -1,8 +1,7 @@
 {
 	"host":"127.0.0.1",
-	"port":5432,
-	"username":"truc",
-	"db_name":"RAW_BANKING",
-	"passowrd":"blablazerty",
-	"'path_to_master":"master.json"
+	"server_port":5432,
+	"username":"antoine",
+	"password":"devpass",
+	"path_to_master":"master.json"
 }
