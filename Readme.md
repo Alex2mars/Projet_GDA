@@ -9,7 +9,7 @@ Dossier **docker_postgres** du Git :
     2) La sauvegarder dans le dossier **deployment**
 
 - deployment : Dossier contenant le nécessaire pour déployer le docker
-  - Lancer ./run.sh **la première fois**, ce qui va :
+  - Lancer ./run.sh **la première fois** (ou chaque fois que l'on a modifié l'image), ce qui va :
     1) Charger l'image dans docker
     2) Lancer *docker-compose -d up*, pour lancer le service et le passer en arrière plan
    
