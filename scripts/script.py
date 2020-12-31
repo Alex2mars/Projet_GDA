@@ -1,6 +1,7 @@
 import json
 import sys
 import os
+import csv
 import psycopg2 as psy
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import subprocess
@@ -52,6 +53,23 @@ def create_tables(conn, dbname, tables):
     cur.execute(sql_file.read())
     cur.close()
 
+def populate_tables(conn, dbname, csv_file, headers):
+    cur = conn.cursor()
+    for table, file in csv_file.items():
+        #print(table, ' : ', file)
+
+        with open(file, 'r') as f:
+            if(table in headers and headers[table]):
+                reader = csv.reader(f)
+                selected_col = tuple(next(reader))
+                cur.copy_from(f, table, sep=',', columns=selected_col)
+            else:
+                cur.copy_from(f, table, sep=',')
+    conn.commit()
+    cur.close()
+
+
+
 if __name__ == '__main__':
     db_exist = True
     if len(sys.argv) >= 3:
@@ -82,5 +100,13 @@ if __name__ == '__main__':
     #Create tables
     if handler['action'] == 'create' and "tables_to_create" in handler:
         create_tables(connection, handler['db_name'], handler['tables_to_create'])
+
+    #Populate tables
+    if handler['action'] == 'populate' and "data_to_import" in handler:
+        print("Populate some tables")
+        headers = False
+        if "headers_in_csv" in handler:
+            headers = handler['headers_in_csv']
+            populate_tables(connection, handler['db_name'], handler['data_to_import'], headers)
 
     print("Everything should be ok !")

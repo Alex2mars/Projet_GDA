@@ -1,7 +1,7 @@
 {
-	"action": "populate",
+	"action": "create",
 	"db_name": "truc",
 	"type":["annonClasses","pseudonymization.colSuppression", "annonClasses.k_annon.k_annon2"],
 	"datasource":"banking",
-	"data_to_import":{"persons":"samples/persons.csv", "books":"samples/books.csv"}
+	"tables_to_create":"samples/create_table.sql"
 }
