@@ -85,11 +85,11 @@ if __name__ == '__main__':
     handler = read_file(gestion)
     #print("BDD : ", bdd)
 
-    if "db_name" not in bdd:
-        bdd['db_name'] = 'postgres'
+    if handler['action'] == 'create_db':
+        handler['db_name'] = 'postgres'
         db_exist = False
     
-    connection = connect(bdd['host'], bdd['db_name'], bdd['username'], bdd['password'], bdd['server_port'])
+    connection = connect(bdd['host'], handler['db_name'], bdd['username'], bdd['password'], bdd['server_port'])
     #print(connection)
 
     #Create db
