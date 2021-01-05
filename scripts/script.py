@@ -68,9 +68,21 @@ def populate_tables(conn, dbname, csv_file, headers):
     conn.commit()
     cur.close()
 
+def drop_database(conn, dbname):
+    cur = conn.cursor()
+    cur.execute(f"DROP DATABASE {dbname} WITH (FORCE)")
+    cur.close()
+
+def drop_tables(conn, dbname, tables):
+    cur = conn.cursor()
+    for table in tables:
+        cur.execute(f"DROP TABLE {table}" )
+    cur.close()
+
 
 
 if __name__ == '__main__':
+    done = set()
     db_exist = True
     if len(sys.argv) >= 3:
         connection = sys.argv[1]
@@ -85,28 +97,52 @@ if __name__ == '__main__':
     handler = read_file(gestion)
     #print("BDD : ", bdd)
 
+    db_name_connect = handler['db_name']
     if handler['action'] == 'create_db':
-        handler['db_name'] = 'postgres'
+        db_name_connect = 'postgres'
         db_exist = False
     
-    connection = connect(bdd['host'], handler['db_name'], bdd['username'], bdd['password'], bdd['server_port'])
+    connection = connect(bdd['host'], db_name_connect, bdd['username'], bdd['password'], bdd['server_port'])
     #print(connection)
 
     #Create db
-    if handler['action'] == 'create' and not db_exist:
-        print("Create db")
+    if handler['action'] == 'create_db' and not db_exist:
+        #print("Create db")
         create_database(connection, handler['db_name'])
+        done.add(f"{handler['db_name']} has been created")
 
     #Create tables
     if handler['action'] == 'create' and "tables_to_create" in handler:
         create_tables(connection, handler['db_name'], handler['tables_to_create'])
+        done.add("Many tables have been created")
 
     #Populate tables
     if handler['action'] == 'populate' and "data_to_import" in handler:
-        print("Populate some tables")
+        #print("Populate some tables")
         headers = False
         if "headers_in_csv" in handler:
             headers = handler['headers_in_csv']
             populate_tables(connection, handler['db_name'], handler['data_to_import'], headers)
+            done.add("Some data have been stored in several tables")
+
+    #Drop db
+    if handler['action'] == 'delete_db' and db_exist:
+        #print("Delete a db")
+        drop_database(connection, handler['db_name'])
+        done.add(f"{handler['db_name']} has been deleted")
+
+    #Drop tables
+    if handler['action'] == 'delete' and "tables" in handler:
+        #print("Delete tables")
+        drop_tables(connection, handler['db_name'], handler['tables'])
+        done.add("Some tables have been deleted")
+
+
+    if(len(done) >= 1):
+        print("Let's sum up what has been done : ")
+        for action in done:
+            print(action)
+    else:
+        print("Nothing has been done. That's maybe due to an error in "+gestion)
 
     print("Everything should be ok !")
