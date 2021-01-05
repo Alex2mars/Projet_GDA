@@ -123,7 +123,7 @@ if __name__ == '__main__':
         if "headers_in_csv" in handler:
             headers = handler['headers_in_csv']
             populate_tables(connection, handler['db_name'], handler['data_to_import'], headers)
-            done.add("Some data have been stored in several tables")
+        done.add("Some data have been stored in several tables")
 
     #Drop db
     if handler['action'] == 'delete_db' and db_exist:
